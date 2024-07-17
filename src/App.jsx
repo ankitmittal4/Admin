@@ -6,7 +6,7 @@ import DashboardRoutes from "./components/DashboardRoutes";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<SignIn />} />
+      <Route path="/" element={<DashboardRoutes />} />
       <Route path="/dashboard/*" element={<DashboardRoutes />} />
     </Routes>
   );
