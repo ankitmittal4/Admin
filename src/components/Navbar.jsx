@@ -1,8 +1,8 @@
 import React from "react";
 
 const Navbar = () => (
-  <div className="">
-    <div className="w-full bg-gray-900 p-3 flex items-center justify-between">
+  <div className="fixed top-0 left-0 w-full bg-gray-900 p-3 flex flex-col z-10">
+    <div className="flex items-center justify-between">
       <div className="flex items-center">
         <h1 className="text-3xl font-bold">Sriina</h1>
       </div>
@@ -21,7 +21,7 @@ const Navbar = () => (
         />
       </div>
     </div>
-    <hr />
+    <hr className="border-gray-400 mt-3" />
   </div>
 );
 
