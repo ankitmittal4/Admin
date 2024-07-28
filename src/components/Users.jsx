@@ -10,19 +10,6 @@ const Users = () => {
   const [loading, setLoading] = useState(false);
   const limit = 10;
 
-  // const fetchUsers = async (page) => {
-  //   setLoading(true);
-  //   try {
-  //     const response = await axios.get("url");
-  //     setUsers(response.data.users);
-  //     setCurrentPage(response.data.currentPage);
-  //     setTotalPages(response.data.totalPages);
-  //   } catch (error) {
-  //     console.log("Error while fetching users: ", error);
-  //   }
-  //   setLoading(false);
-  // };
-
   const fetchUsers = (page) => {
     setLoading(true);
     // Simulate API call with dummy data
