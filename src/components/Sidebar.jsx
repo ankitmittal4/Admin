@@ -13,7 +13,7 @@ const Sidebar = () => (
         </Link>
       </li>
       <li className="mb-3">
-        <Link 
+        <Link
           to="/dashboard/orders"
           className="block p-1 px-3 rounded-lg hover:bg-gray-600"
         >

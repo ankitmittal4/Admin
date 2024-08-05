@@ -39,6 +39,7 @@ const LoginForm = () => {
       let data = JSON.stringify({
         query: `mutation AdminLogin($email: String!, $password: String!) {
     adminLogin(email: $email, password: $password) {
+        message
         token
         admin {
             name
@@ -54,7 +55,7 @@ const LoginForm = () => {
       let config = {
         method: "post",
         maxBodyLength: Infinity,
-        url: "http://13.201.191.94:8000/graphql",
+        url: "http://15.207.165.187/graphql",
         headers: {
           "Content-Type": "application/json",
         },
@@ -62,11 +63,13 @@ const LoginForm = () => {
       };
 
       const response = await axios.request(config);
+      console.log("Request: ", response.data.data);
 
       const token = response.data.data.adminLogin.token;
-      const username = response.data.data.adminLogin.admin.name;
-      console.log("Login successful", response.data.data.adminLogin);
-      if (token) {
+      // console.log(token);
+      if (token !== null) {
+        const username = response.data.data.adminLogin.admin.name;
+        console.log("Login successful", response.data.data.adminLogin);
         setSuccessMsg(true);
         setErrorMsg(false);
 
@@ -81,28 +84,18 @@ const LoginForm = () => {
           setShowMessage(false);
           navigate("/dashboard");
         }, 1000);
-      }
-      // else {
-      //   setErrorMsg(true);
-      //   setSuccessMsg(false);
-      // }
-
-      //redirect or display success msg
-    } catch (error) {
-      console.error("Login Failed", error.response);
-
-      if (error.response.request.status === 400) {
+      } else {
+        setLoading(false);
         setErrorMsg(true);
         setSuccessMsg(false);
-        setLoginError(error.response.data.message);
+        setLoginError(response.data.data.adminLogin.message);
         setShowMessage(true);
         setTimeout(() => {
           setShowMessage(false);
         }, 2000);
       }
-      //displays error msg to user
-    } finally {
-      setLoading(false);
+    } catch (error) {
+      console.log("error: ", error);
     }
   };
   return (
