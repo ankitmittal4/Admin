@@ -7,7 +7,9 @@ import { setToken } from "../features/adminSlice";
 import { setActiveUser } from "../features/adminSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-
+import Constants from "../Constants";
+const { API_URL } = Constants;
+// console.log(API_URL);
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,14 +40,14 @@ const LoginForm = () => {
     try {
       let data = JSON.stringify({
         query: `mutation AdminLogin($email: String!, $password: String!) {
-    adminLogin(email: $email, password: $password) {
-        message
-        token
-        admin {
+        adminLogin(email: $email, password: $password) {
+          message
+          token
+          admin {
             name
+          }
         }
-    }
-}`,
+      }`,
         variables: {
           email: email,
           password: password,
@@ -55,7 +57,7 @@ const LoginForm = () => {
       let config = {
         method: "post",
         maxBodyLength: Infinity,
-        url: "http://15.207.165.187/graphql",
+        url: API_URL,
         headers: {
           "Content-Type": "application/json",
         },

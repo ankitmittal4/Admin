@@ -6,6 +6,8 @@ import Users from "./Users";
 import Orders from "./Orders";
 import Products from "./Products";
 import Sellers from "./Sellers";
+import Category from "./Category";
+import SubCategory from "./SubCategory";
 const DashboardRoutes = () => {
   return (
     <div className="bg-gray-900 min-h-screen flex flex-col text-white">
@@ -17,6 +19,11 @@ const DashboardRoutes = () => {
             <Route path="/" element={<Users />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/products" element={<Products />} />
+            <Route path="/products/category" element={<Category />} />
+            <Route
+              path="/products/category/sub-category/:categoryId"
+              element={<SubCategory />}
+            />
             <Route path="/sellers" element={<Sellers />} />
           </Routes>
         </div>

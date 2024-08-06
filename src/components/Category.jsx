@@ -2,31 +2,29 @@ import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import dummyUsers from "../dummyUsers";
-
-const Products = () => {
-  const [users, setUsers] = useState([]);
+import { useNavigate } from "react-router-dom";
+const Category = () => {
+  const [categories, setCategories] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
   const limit = 10;
+  const navigate = useNavigate();
 
-  const fetchUsers = (page) => {
+  const fetchCategory = async (page) => {
     setLoading(true);
-    // Simulate API call with dummy data
-    setTimeout(() => {
-      const totalUsers = dummyUsers.users.length;
-      const startIndex = (page - 1) * limit;
-      const endIndex = startIndex + limit;
-      const paginateUsers = dummyUsers.users.slice(startIndex, endIndex);
-      // const { users, currentPage, totalPages } = dummyUsers;
-      setUsers(paginateUsers);
-      // setCurrentPage(currentPage);
-      setTotalPages(Math.ceil(totalUsers / limit));
-      setLoading(false);
-    }, 500);
+    const res = await axios.get();
+    //array of all category : res.data
+    const totalCategory = res.data.length;
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+    const paginateCategory = res.data.slice(startIndex, endIndex);
+    setCategories(paginateCategory);
+    setTotalPages(Math.ceil(totalCategory / limit));
+    setLoading(false);
   };
   useEffect(() => {
-    fetchUsers(currentPage);
+    fetchCategory(currentPage);
   }, [currentPage]);
 
   const handlePageChange = (page) => {
@@ -34,10 +32,12 @@ const Products = () => {
       setCurrentPage(page);
     }
   };
-
+  const handleSubCategory = (categoryId) => {
+    navigate(`sub-category/${categoryId}`);
+  };
   return (
     <>
-      <h2 className="text-2xl font-bold mb-5">All Products</h2>
+      <h2 className="text-2xl font-bold mb-5">All Category</h2>
       <div className="bg-gray-800 w-full rounded-lg">
         {loading ? (
           <p>Loading...</p>
@@ -52,12 +52,16 @@ const Products = () => {
                 </tr>
               </thead>
               <tbody>
-                {users.map((user) => (
-                  <tr key={user.id} className="text-lg hover:bg-gray-600">
-                    <td className="py-2 px-4">{user.name}</td>
-                    <td className="py-2">{user.email}</td>
+                {categories.map((category) => (
+                  <tr
+                    key={category.id}
+                    className="text-lg hover:bg-gray-600 cursor-pointer"
+                    onClick={() => handleSubCategory(category.id)}
+                  >
+                    <td className="py-2 px-4">{category.name}</td>
+                    <td className="py-2">{category.email}</td>
                     <td className="py-2">
-                      {new Date(user.addedOn).toLocaleDateString()}
+                      {new Date(category.addedOn).toLocaleDateString()}
                     </td>
                   </tr>
                 ))}
@@ -89,4 +93,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default Category;
