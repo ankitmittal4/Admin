@@ -82,10 +82,9 @@ const LoginForm = () => {
         localStorage.setItem("username", username);
 
         setShowMessage(true);
-        setTimeout(() => {
-          setShowMessage(false);
-          navigate("/dashboard");
-        }, 1000);
+        setShowMessage(false);
+        navigate("/dashboard");
+        setLoading(false);
       } else {
         setLoading(false);
         setErrorMsg(true);
