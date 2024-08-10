@@ -3,6 +3,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+
 import Constants from "../Constants";
 const { API_URL } = Constants;
 const Category = () => {
@@ -64,6 +67,12 @@ const Category = () => {
 
   const handleSubCategory = (categoryId) => {
     navigate(`sub-category/${categoryId}`);
+  };
+  const deleteCategory = (categoryId) => {
+    //delete api
+  };
+  const editCategory = (categoryId) => {
+    //edit api
   };
 
   //FIXME: Add category code
@@ -198,7 +207,12 @@ const Category = () => {
                 <tr className="text-left ">
                   <th className="py-2 text-xl px-4 border-b">Name</th>
                   <th className="py-2 text-xl border-b">Sub-Category</th>
-                  <th className="py-2 text-xl border-b">Delete</th>
+                  <th className="py-2 text-xl border-b w-28 text-center">
+                    Edit
+                  </th>
+                  <th className="py-2 text-xl border-b w-28 text-center">
+                    Delete
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -210,8 +224,17 @@ const Category = () => {
                   >
                     <td className="py-2 px-4">{category.title}</td>
                     <td className="py-2">{category.createdAt}</td>
-                    <td className="py-2">
-                      {<FontAwesomeIcon icon="fa-solid fa-trash" />}
+                    <td
+                      className="py-2 text-center hover:bg-blue-600"
+                      onClick={() => editCategory(category.id)}
+                    >
+                      <FontAwesomeIcon icon={faPenToSquare} />
+                    </td>
+                    <td
+                      className="py-2 text-center hover:bg-red-500"
+                      onClick={() => deleteCategory(category.id)}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
                     </td>
                   </tr>
                 ))}

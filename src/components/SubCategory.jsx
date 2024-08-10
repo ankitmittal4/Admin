@@ -3,6 +3,9 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import Constants from "../Constants";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 const { API_URL } = Constants;
 
 const SubCategory = () => {
@@ -64,6 +67,12 @@ const SubCategory = () => {
   useEffect(() => {
     fetchSubCategory();
   }, []);
+  const deleteSubCategory = (categoryId) => {
+    //delete api
+  };
+  const editSubCategory = (categoryId) => {
+    //edit api
+  };
 
   //FIXME: Add sub-category code
 
@@ -204,6 +213,12 @@ const SubCategory = () => {
                 <tr className="text-left ">
                   <th className="py-2 text-xl px-4 border-b">Name</th>
                   <th className="py-2 text-xl border-b">Sub-Category</th>
+                  <th className="py-2 text-xl border-b w-28 text-center">
+                    Edit
+                  </th>
+                  <th className="py-2 text-xl border-b w-28 text-center">
+                    Delete
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -211,10 +226,21 @@ const SubCategory = () => {
                   <tr
                     key={subCategory.id}
                     className="text-lg hover:bg-gray-600 cursor-pointer"
-                    // onClick={() => handleSubCategory(subCategory.id)}
                   >
                     <td className="py-2 px-4">{subCategory.title}</td>
                     <td className="py-2">{subCategory.createdAt}</td>
+                    <td
+                      className="py-2 text-center hover:bg-blue-600"
+                      onClick={() => editSubCategory(subCategory.id)}
+                    >
+                      <FontAwesomeIcon icon={faPenToSquare} />
+                    </td>
+                    <td
+                      className="py-2 text-center hover:bg-red-500"
+                      onClick={() => deleteSubCategory(subCategory.id)}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </td>
                   </tr>
                 ))}
               </tbody>
