@@ -26,12 +26,15 @@ const Category = () => {
               title
               createdAt
               updatedAt
+              productSubCategories {
+                id
+              }
             }
           }
         }`,
         variables: {
           page: 1,
-          limit: 10,
+          limit: 1000,
         },
       });
 
@@ -50,8 +53,9 @@ const Category = () => {
       // console.log("Request: ", response.data.data);
 
       const category = response.data.data.adminListCategory.category;
+
       if (category.length) {
-        console.log("Category: ", category);
+        // console.log("Category: ", category);
         setCategories(category);
         setLoading(false);
       } else {
@@ -206,7 +210,9 @@ const Category = () => {
               <thead>
                 <tr className="text-left ">
                   <th className="py-2 text-xl px-4 border-b">Name</th>
-                  <th className="py-2 text-xl border-b">Sub-Category</th>
+                  <th className="py-2 text-xl border-b text-center w-96">
+                    Sub-Category
+                  </th>
                   <th className="py-2 text-xl border-b w-28 text-center">
                     Edit
                   </th>
@@ -223,7 +229,9 @@ const Category = () => {
                     onClick={() => handleSubCategory(category.id)}
                   >
                     <td className="py-2 px-4">{category.title}</td>
-                    <td className="py-2">{category.createdAt}</td>
+                    <td className="py-2 text-center">
+                      {category.productSubCategories.length}
+                    </td>
                     <td
                       className="py-2 text-center hover:bg-blue-600"
                       onClick={() => editCategory(category.id)}

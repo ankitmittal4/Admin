@@ -15,7 +15,6 @@ const SubCategory = () => {
   const [loading, setLoading] = useState(false);
   const { categoryId } = useParams();
   // console.log("categoryId: ", typeof Number(categoryId));
-
   const fetchSubCategory = async () => {
     setLoading(true);
     try {
@@ -23,6 +22,7 @@ const SubCategory = () => {
         query: `mutation AdminListSubCategory($categoryId1: Int!) {
           adminListSubCategory(categoryId: $categoryId1) {
             message
+            categoryName
             subCategory {
               id
               title
@@ -51,13 +51,15 @@ const SubCategory = () => {
       // console.log("Request: ", response.data.data);
 
       const subCategory = response.data.data.adminListSubCategory.subCategory;
-      // const category = response.data.data.adminListSubCategory.categoryName;
+
+      const category = response.data.data.adminListSubCategory.categoryName;
+      setCategoryName(category);
       if (subCategory.length) {
         // console.log("Sub-Category: ", subCategory);
         setSubCategories(subCategory);
-        // setCategoryName(category);
         setLoading(false);
       } else {
+        setSubCategories([]);
         setLoading(false);
       }
     } catch (error) {
@@ -155,7 +157,7 @@ const SubCategory = () => {
   return (
     <>
       <div className="flex justify-between mb-8">
-        <h2 className="text-2xl font-bold mb-0">
+        <h2 className="text-2xl font-bold mb-0  ">
           Sub Categories of {categoryName}
         </h2>
         <button
@@ -203,11 +205,15 @@ const SubCategory = () => {
         </div>
       )}
 
-      <div className="bg-gray-800 w-full rounded-lg">
+      <div className=" w-full rounded-lg flex flex-col items-center justify-center ">
         {loading ? (
           <p>Loading...</p>
+        ) : subCategories.length === 0 ? (
+          <h1 className="text-2xl bg-gray-900 mt-40 text-red-600">
+            No subcategories found.
+          </h1>
         ) : (
-          <div>
+          <div className="w-full">
             <table className="min-w-full bg-gray-800 rounded-lg">
               <thead>
                 <tr className="text-left ">
