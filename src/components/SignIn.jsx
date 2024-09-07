@@ -43,7 +43,7 @@ const LoginForm = () => {
         password: password,
       };
 
-      const response = await axios.post(`${API_URL}admin/login`, data);
+      const response = await axios.post(`${API_URL}/admin/login`, data);
       console.log("Request: ", response.data.data);
 
       const token = response.data.data.accessToken;

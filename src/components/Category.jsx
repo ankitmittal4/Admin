@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+// import formData from FormData();
 
 import Constants from "../Constants";
 const { API_URL } = Constants;
@@ -18,7 +19,7 @@ const Category = () => {
     setLoading(true);
     try {
       const data = {
-        limit: 10,
+        limit: 100,
         page: 1,
       };
       const response = await axios.post(`${API_URL}/category/list`, data);
@@ -44,11 +45,31 @@ const Category = () => {
   const handleSubCategory = (categoryId) => {
     navigate(`sub-category/${categoryId}`);
   };
-  const deleteCategory = (categoryId) => {
-    //delete api
+  const deleteCategory = async (categoryId) => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/category/delete`,
+        categoryId
+      );
+      console.log("response: ", response);
+    } catch (error) {
+      console.log("Error: ", error);
+    }
   };
-  const editCategory = (categoryId) => {
-    //edit api
+  const editCategory = async (categoryId) => {
+    try {
+      const formData = new FormData();
+      formData.append("categoryId", categoryId);
+      formData.append("name", categoryName);
+      formData.append("image", selectedFile);
+      const response = await axios.post(
+        "http://15.207.165.187/api/category/add",
+        formData
+      );
+      console.log(response);
+    } catch (error) {
+      console.log("Error: ", error);
+    }
   };
 
   //FIXME: Add category code
@@ -56,6 +77,7 @@ const Category = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [categoryName, setCategoryName] = useState("");
   const [duplicateCategory, setDuplicateCategory] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
   const handleClosePopup = () => {
     setShowPopup(false);
   };
@@ -67,19 +89,31 @@ const Category = () => {
   const handleInputChange = (e) => {
     setCategoryName(e.target.value);
   };
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      console.log("-------------------");
-      const data = {
-        limit: 10,
-        page: 1,
-      };
-      const response = await axios.post(`${API_URL}/category/list`, data);
+      const formData = new FormData();
+      formData.append("name", categoryName);
+      formData.append("image", selectedFile);
+
+      const response = await axios.post(
+        "http://15.207.165.187/api/category/add",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          maxBodyLength: Infinity,
+        }
+      );
       console.log("Request: ", response.data.data);
-      const addedCategory = response.data.data.adminAddCategory.category;
+
+      const addedCategory = response.data.data;
       if (addedCategory) {
-        console.log("Added Category: ", addedCategory);
+        // console.log("Added Category: ", addedCategory);
         setCategories((prevCategories) => [...prevCategories, addedCategory]);
         setLoading(false);
         setDuplicateCategory(false);
@@ -92,7 +126,7 @@ const Category = () => {
         }, 400);
       }
     } catch (error) {
-      console.log("error: ", error);
+      console.log("error: ", error.message);
     }
   };
   const setUpdateOnEnter = (e) => {
@@ -125,6 +159,19 @@ const Category = () => {
               onKeyDown={(e) => setUpdateOnEnter(e)}
               placeholder="Enter Category"
               className="border border-gray-500 p-2 rounded-md w-full mb-1 text-gray-800 bg-gray-200 outline-none"
+            />
+            <label
+              htmlFor="profile-picture"
+              className="cursor-pointer px-3 py-2 focus:outline-none mt-0 text-blue-600"
+            >
+              Upload Image
+            </label>
+            <input
+              id="profile-picture"
+              name="profile-picture"
+              type="file"
+              onChange={handleFileChange}
+              className="hidden"
             />
             <div className="h-6 flex items-center">
               {duplicateCategory && (
