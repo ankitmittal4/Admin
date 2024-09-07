@@ -38,48 +38,27 @@ const LoginForm = () => {
     // console.log("Password:", password);
 
     try {
-      let data = JSON.stringify({
-        query: `mutation AdminLogin($email: String!, $password: String!) {
-        adminLogin(email: $email, password: $password) {
-          message
-          token
-          admin {
-            name
-          }
-        }
-      }`,
-        variables: {
-          email: email,
-          password: password,
-        },
-      });
-
-      let config = {
-        method: "post",
-        maxBodyLength: Infinity,
-        url: API_URL,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: data,
+      let data = {
+        email: email,
+        password: password,
       };
 
-      const response = await axios.request(config);
+      const response = await axios.post(`${API_URL}admin/login`, data);
       console.log("Request: ", response.data.data);
 
-      const token = response.data.data.adminLogin.token;
+      const token = response.data.data.accessToken;
       // console.log(token);
       if (token !== null) {
-        const username = response.data.data.adminLogin.admin.name;
-        console.log("Login successful", response.data.data.adminLogin);
+        // const username = response.data.data.adminLogin.admin.name;
+        console.log("Login successful", response.data.data.admin);
         setSuccessMsg(true);
         setErrorMsg(false);
 
         dispatch(setToken(token));
         localStorage.setItem("token", token);
 
-        dispatch(setActiveUser(username));
-        localStorage.setItem("username", username);
+        dispatch(setActiveUser(email));
+        localStorage.setItem("username", email);
 
         setShowMessage(true);
         setShowMessage(false);
@@ -89,7 +68,7 @@ const LoginForm = () => {
         setLoading(false);
         setErrorMsg(true);
         setSuccessMsg(false);
-        setLoginError(response.data.data.adminLogin.message);
+        setLoginError(response.data.message);
         setShowMessage(true);
         setTimeout(() => {
           setShowMessage(false);

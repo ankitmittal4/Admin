@@ -17,42 +17,14 @@ const Category = () => {
   const fetchCategory = async () => {
     setLoading(true);
     try {
-      let data = JSON.stringify({
-        query: `mutation AdminListCategory($page: Int, $limit: Int) {
-          adminListCategory(page: $page, limit: $limit) {
-            message
-            category {
-              id
-              title
-              createdAt
-              updatedAt
-              productSubCategories {
-                id
-              }
-            }
-          }
-        }`,
-        variables: {
-          page: 1,
-          limit: 1000,
-        },
-      });
-
-      let config = {
-        method: "post",
-        maxBodyLength: Infinity,
-        url: API_URL,
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
-        data: data,
+      const data = {
+        limit: 10,
+        page: 1,
       };
-
-      const response = await axios.request(config);
+      const response = await axios.post(`${API_URL}/category/list`, data);
       // console.log("Request: ", response.data.data);
 
-      const category = response.data.data.adminListCategory.category;
+      const category = response.data.data.category;
 
       if (category.length) {
         // console.log("Category: ", category);
@@ -98,37 +70,13 @@ const Category = () => {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      let data = JSON.stringify({
-        query: `mutation AdminAddCategory ($name: String!){
-          adminAddCategory(name: $name) {
-            message
-            category {
-              id
-              title
-              createdAt
-              updatedAt
-            }
-          }
-        }`,
-        variables: {
-          name: categoryName,
-        },
-      });
-
-      let config = {
-        method: "post",
-        maxBodyLength: Infinity,
-        url: API_URL,
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
-        data: data,
+      console.log("-------------------");
+      const data = {
+        limit: 10,
+        page: 1,
       };
-
-      const response = await axios.request(config);
+      const response = await axios.post(`${API_URL}/category/list`, data);
       console.log("Request: ", response.data.data);
-
       const addedCategory = response.data.data.adminAddCategory.category;
       if (addedCategory) {
         console.log("Added Category: ", addedCategory);
@@ -224,23 +172,23 @@ const Category = () => {
               <tbody>
                 {categories.map((category) => (
                   <tr
-                    key={category.id}
+                    key={category._id}
                     className="text-lg hover:bg-gray-600 cursor-pointer"
-                    onClick={() => handleSubCategory(category.id)}
+                    onClick={() => handleSubCategory(category._id)}
                   >
-                    <td className="py-2 px-4">{category.title}</td>
+                    <td className="py-2 px-4">{category.name}</td>
                     <td className="py-2 text-center">
-                      {category.productSubCategories.length}
+                      {/* {category.productSubCategories.length} */}
                     </td>
                     <td
                       className="py-2 text-center hover:bg-blue-600"
-                      onClick={() => editCategory(category.id)}
+                      onClick={() => editCategory(category._id)}
                     >
                       <FontAwesomeIcon icon={faPenToSquare} />
                     </td>
                     <td
                       className="py-2 text-center hover:bg-red-500"
-                      onClick={() => deleteCategory(category.id)}
+                      onClick={() => deleteCategory(category._id)}
                     >
                       <FontAwesomeIcon icon={faTrash} />
                     </td>
