@@ -81,10 +81,10 @@ const Category = () => {
     setSelectedFile(null);
   };
 
-  const handleOpenEditPopup = (categoryId) => {
+  const handleOpenEditPopup = (categoryId, categoryName) => {
     setEditCategoryId(categoryId);
     setShowEditPopup(true);
-    setCategoryName("");
+    setCategoryName(categoryName);
     // setDuplicateCategory(false);
   };
   const handleEditCategory = async () => {
@@ -107,8 +107,8 @@ const Category = () => {
           category._id === editCategoryId
             ? {
                 ...category,
-                name: categoryName,
-                image: selectedFile,
+                name: response.data.data.name || categoryName,
+                image: response.data.data.image || selectedFile,
               }
             : category
         )
@@ -118,6 +118,7 @@ const Category = () => {
     } catch (error) {
       console.log("Error: ", error);
     }
+    setSelectedFile(null);
   };
   const setEditOnEnter = (e) => {
     if (e.key === "Enter") {
@@ -358,7 +359,9 @@ const Category = () => {
                     </td>
                     <td
                       className="py-2 text-center hover:bg-blue-600"
-                      onClick={() => handleOpenEditPopup(category._id)}
+                      onClick={() =>
+                        handleOpenEditPopup(category._id, category.name)
+                      }
                     >
                       <FontAwesomeIcon icon={faPenToSquare} />
                     </td>
