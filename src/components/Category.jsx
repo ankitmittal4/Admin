@@ -78,6 +78,7 @@ const Category = () => {
   //FIXME: edit category
   const handleCloseEditPopup = () => {
     setShowEditPopup(false);
+    setSelectedFile(null);
   };
 
   const handleOpenEditPopup = (categoryId) => {
@@ -128,6 +129,7 @@ const Category = () => {
 
   const handleClosePopup = () => {
     setShowPopup(false);
+    setSelectedFile(null);
   };
   const handleOpenPopup = () => {
     setShowPopup(true);
@@ -176,6 +178,7 @@ const Category = () => {
     } catch (error) {
       console.log("error: ", error.message);
     }
+    setSelectedFile(null);
   };
   const setUpdateOnEnter = (e) => {
     if (e.key === "Enter") {
@@ -209,21 +212,31 @@ const Category = () => {
               placeholder="Enter Category"
               className="border border-gray-500 p-2 rounded-md w-full mb-1 text-gray-800 bg-gray-200 outline-none"
             />
-            <label
-              htmlFor="profile-picture"
-              className="cursor-pointer px-3 py-2 focus:outline-none mt-0 text-blue-600"
-            >
-              Upload Image
-            </label>
-            <input
-              id="profile-picture"
-              name="profile-picture"
-              type="file"
-              onChange={handleFileChange}
-              className="hidden"
-            />
+            <div className="flex">
+              {selectedFile && selectedFile.type.startsWith("image/") && (
+                <img
+                  src={URL.createObjectURL(selectedFile)}
+                  alt="Preview"
+                  className="mt-2"
+                  style={{ maxWidth: "100px", maxHeight: "100px" }}
+                />
+              )}
+              <label
+                htmlFor="profile-picture"
+                className="cursor-pointer px-3 py-2 focus:outline-none mt-3 ml-3 text-blue-600"
+              >
+                Upload Image
+              </label>
+              <input
+                id="profile-picture"
+                name="profile-picture"
+                type="file"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+            </div>
 
-            <div className="mt-3 flex justify-between">
+            <div className="mt-6 flex justify-between">
               <button
                 onClick={handleEditCategory}
                 className="bg-blue-500 hover:bg-blue-700 text-white px-5 py-2 rounded-md mr-2"
@@ -254,25 +267,35 @@ const Category = () => {
               placeholder="Enter Category"
               className="border border-gray-500 p-2 rounded-md w-full mb-1 text-gray-800 bg-gray-200 outline-none"
             />
-            <label
-              htmlFor="profile-picture"
-              className="cursor-pointer px-3 py-2 focus:outline-none mt-0 text-blue-600"
-            >
-              Upload Image
-            </label>
-            <input
-              id="profile-picture"
-              name="profile-picture"
-              type="file"
-              onChange={handleFileChange}
-              className="hidden"
-            />
+            <div className="flex">
+              {selectedFile && selectedFile.type.startsWith("image/") && (
+                <img
+                  src={URL.createObjectURL(selectedFile)}
+                  alt="Preview"
+                  className="mt-2"
+                  style={{ maxWidth: "100px", maxHeight: "100px" }}
+                />
+              )}
+              <label
+                htmlFor="profile-picture"
+                className="cursor-pointer px-3 py-2 focus:outline-none mt-3 text-blue-600"
+              >
+                Upload Image
+              </label>
+              <input
+                id="profile-picture"
+                name="profile-picture"
+                type="file"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+            </div>
             <div className="h-6 flex items-center">
               {duplicateCategory && (
                 <div className="text-red-500">Category already exists.</div>
               )}
             </div>
-            <div className="mt-3 flex justify-between">
+            <div className="mt-0 flex justify-between">
               <button
                 onClick={handleSubmit}
                 className="bg-blue-500 hover:bg-blue-700 text-white px-5 py-2 rounded-md mr-2"
